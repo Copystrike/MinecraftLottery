@@ -2,6 +2,7 @@ package github.copystrike.lotty;
 
 import github.copystrike.lotty.command.CommandHandler;
 import github.copystrike.lotty.command.CommandManager;
+import github.copystrike.lotty.utils.io.imp.MessageConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -25,13 +26,9 @@ public abstract class LotteryBase extends JavaPlugin {
 
     abstract public CommandManager getCommandManager();
 
+    abstract public MessageConfig getMessageConfig();
+
     public Logger getLotteryLogger() {
         return Bukkit.getLogger();
     }
-
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        return getCommandHandler().onCommand(sender, command, label, args);
-    }
-
 }

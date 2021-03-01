@@ -1,0 +1,8 @@
+name: LotteryPlugin
+description: A lottery plugin to show off my skills
+main: github.copystrike.lotty.LotteryPlugin
+version: 1.0
+api-version: 1.8.8
+commands:
+  lotty:
+    description: The main command.

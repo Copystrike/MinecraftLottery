@@ -1,6 +1,9 @@
 package github.copystrike.lotty.game;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * GameManager - The lottery manager, here the lottery will be managed.

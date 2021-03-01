@@ -1,6 +1,11 @@
 package github.copystrike.lotty.player;
 
+import github.copystrike.lotty.LotteryBase;
+import github.copystrike.lotty.LotteryPlugin;
+import github.copystrike.lotty.utils.io.imp.MessageConfig;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.ServerOperator;
 
 /**
  * LotteryPlayer -
@@ -58,5 +63,15 @@ public class LotteryPlayer implements LotteryUser {
     @Override
     public void setLoss(int amount) {
         this.losses = amount;
+    }
+
+    @Override
+    public void sendFormattedMessage(String message) {
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', LotteryPlugin.getLotteryPlugin().getMessageConfig().getPrefix() + " " + message));
+    }
+
+    @Override
+    public void sendMessage(String message) {
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
     }
 }

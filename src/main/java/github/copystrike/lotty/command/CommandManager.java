@@ -4,9 +4,6 @@ import github.copystrike.lotty.LotteryBase;
 import github.copystrike.lotty.command.annotations.Command;
 import github.copystrike.lotty.command.exception.CommandAnnotationNotFound;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * CommandManager - Here the commands will be handled
  *
@@ -15,14 +12,10 @@ import java.util.Map;
  */
 public class CommandManager {
 
-    private final CommandHandler commandHandler;
     private final LotteryBase lotteryBase;
-    private final Map<String, LotteryCommand> lotteryCommands;
 
     public CommandManager(LotteryBase lotteryBase) {
         this.lotteryBase = lotteryBase;
-        this.lotteryCommands = new HashMap<>();
-        this.commandHandler = new CommandHandler();
     }
 
     /**
@@ -31,12 +24,7 @@ public class CommandManager {
      */
     public void registerCommand(LotteryCommand lotteryCommand) {
         Command commandAnnotation = lotteryCommand.getClass().getAnnotation(Command.class);
-        if (commandAnnotation == null) throw new CommandAnnotationNotFound(lotteryCommand);
-        lotteryBase.getServer().getPluginCommand(commandAnnotation.value()).setExecutor(commandHandler);
-        lotteryCommands.put(commandAnnotation.value(), lotteryCommand);
-    }
-
-    public Map<String, LotteryCommand> getLotteryCommands() {
-        return lotteryCommands;
+        if (commandAnnotation == null) throw new CommandAnnotationNotFound(lotteryCommand.getClass());
+        lotteryBase.getServer().getPluginCommand(commandAnnotation.value()).setExecutor(lotteryCommand);
     }
 }

@@ -2,6 +2,7 @@ package github.copystrike.lotty.command.commands;
 
 import github.copystrike.lotty.command.LotteryCommand;
 import github.copystrike.lotty.command.annotations.SubCommand;
+import github.copystrike.lotty.player.LotteryStats;
 import github.copystrike.lotty.player.LotteryUser;
 
 /**
@@ -11,11 +12,11 @@ import github.copystrike.lotty.player.LotteryUser;
  * @since 01/03/2021 @ 01:39
  */
 
-@SubCommand()
-public class LotteryStartCommand implements LotteryCommand {
+@SubCommand("start")
+public class LotteryStartCommand extends LotteryCommand {
 
     @Override
-    public void execute(LotteryCommand lotteryCommand, LotteryUser lotteryUser) {
+    protected void execute(LotteryCommand lotteryCommand, LotteryUser lotteryUser) {
 
     }
 }

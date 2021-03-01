@@ -13,4 +13,6 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface SubCommand {}
+public @interface SubCommand {
+    String value();
+}

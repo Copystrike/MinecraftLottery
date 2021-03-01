@@ -1,2 +1,3 @@
 message:
   start_lottery: "&5You started a lottery"
+  prefix: "&8[&dLotty&5Lottery&8]"

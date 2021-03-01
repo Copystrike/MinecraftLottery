@@ -1,8 +1,8 @@
 package github.copystrike.lotty.command.commands;
 
-import github.copystrike.lotty.LotteryBase;
 import github.copystrike.lotty.command.LotteryCommand;
 import github.copystrike.lotty.command.annotations.Command;
+import github.copystrike.lotty.player.LotteryStats;
 import github.copystrike.lotty.player.LotteryUser;
 
 /**
@@ -12,15 +12,11 @@ import github.copystrike.lotty.player.LotteryUser;
  * @since 28/02/2021 @ 22:47
  */
 
-@Command("lottery")
-public class LotteryDefaultCommand implements LotteryCommand {
-
-    public LotteryDefaultCommand(LotteryBase lotteryBase) {
-        super();
-    }
+@Command("lotty")
+public class LotteryDefaultCommand extends LotteryCommand {
 
     @Override
     public void execute(LotteryCommand lotteryCommand, LotteryUser lotteryUser) {
-
+        lotteryUser.sendFormattedMessage("Hey 😘");
     }
 }

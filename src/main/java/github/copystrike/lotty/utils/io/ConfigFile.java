@@ -2,7 +2,6 @@ package github.copystrike.lotty.utils.io;
 
 
 import github.copystrike.lotty.LotteryBase;
-import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 
