@@ -11,9 +11,13 @@ import org.bukkit.command.CommandSender;
 public class LotteryPlayer implements LotteryUser {
 
     private final CommandSender sender;
+    private int wins;
+    private int losses;
 
     public LotteryPlayer(CommandSender sender) {
         this.sender = sender;
+        this.wins = 0;
+        this.losses = 0;
     }
 
     @Override
@@ -24,5 +28,35 @@ public class LotteryPlayer implements LotteryUser {
     @Override
     public void setOp(boolean value) {
         sender.setOp(value);
+    }
+
+    @Override
+    public int getWins() {
+        return this.wins;
+    }
+
+    @Override
+    public int getLosses() {
+        return this.losses;
+    }
+
+    @Override
+    public int addWin(int amount) {
+        return this.wins =+ amount;
+    }
+
+    @Override
+    public int addLoss(int amount) {
+        return this.losses =- amount;
+    }
+
+    @Override
+    public void setWins(int amount) {
+        this.wins = amount;
+    }
+
+    @Override
+    public void setLoss(int amount) {
+        this.losses = amount;
     }
 }
