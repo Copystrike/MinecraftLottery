@@ -1,22 +1,24 @@
 package github.copystrike.lotty.command.commands;
 
 import github.copystrike.lotty.command.LotteryCommand;
-import github.copystrike.lotty.command.annotations.SubCommand;
-import github.copystrike.lotty.player.LotteryStats;
+import github.copystrike.lotty.command.annotations.Endless;
+import github.copystrike.lotty.command.annotations.Subcommand;
 import github.copystrike.lotty.player.LotteryUser;
 
 /**
- * LotteryStartCommand - This command will start the lottery.
+ * LotteryStartCommand - This is a subcommand to {@link LotteryDefaultCommand},
+ * The command will be able to start a lottery.
  *
  * @author Copystrike
  * @since 01/03/2021 @ 01:39
  */
 
-@SubCommand("start")
+@Subcommand("start")
+@Endless
 public class LotteryStartCommand extends LotteryCommand {
 
     @Override
-    protected void execute(LotteryCommand lotteryCommand, LotteryUser lotteryUser) {
-
+    protected void execute(LotteryUser lotteryUser, String[] args) {
+        lotteryUser.sendFormattedMessage("Hey start");
     }
 }

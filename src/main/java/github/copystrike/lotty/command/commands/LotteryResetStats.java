@@ -1,8 +1,7 @@
 package github.copystrike.lotty.command.commands;
 
 import github.copystrike.lotty.command.LotteryCommand;
-import github.copystrike.lotty.command.annotations.SubCommand;
-import github.copystrike.lotty.player.LotteryStats;
+import github.copystrike.lotty.command.annotations.Subcommand;
 import github.copystrike.lotty.player.LotteryUser;
 
 /**
@@ -11,11 +10,10 @@ import github.copystrike.lotty.player.LotteryUser;
  * @author Copystrike
  * @since 01/03/2021 @ 01:55
  */
-@SubCommand("reset")
+@Subcommand("reset")
 public class LotteryResetStats extends LotteryCommand {
 
     @Override
-    protected void execute(LotteryCommand lotteryCommand, LotteryUser lotteryUser) {
-
+    protected void execute(LotteryUser lotteryUser, String[] args) {
     }
 }

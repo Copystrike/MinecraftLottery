@@ -1,10 +1,9 @@
 package github.copystrike.lotty.command;
 
-import github.copystrike.lotty.LotteryBase;
-import github.copystrike.lotty.LotteryPlugin;
+import github.copystrike.lotty.command.exception.MainCommandEndlessAnnotationException;
 import github.copystrike.lotty.player.LotteryPlayer;
-import github.copystrike.lotty.player.LotteryStats;
 import github.copystrike.lotty.player.LotteryUser;
+import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -22,40 +21,48 @@ import java.util.Map;
  */
 public abstract class LotteryCommand implements CommandExecutor {
 
-    private final CommandManager commandManager;
-    private final String commandName;
+    private final CommandHelper commandHelper;
     private final Map<String, LotteryCommand> subcommands;
 
-    public LotteryCommand() {
-        CommandHelper commandHelper = new CommandHelper();
-        this.commandManager = LotteryPlugin.getLotteryPlugin().getCommandManager();
-        this.commandName = commandHelper.getCommandNameByClass(this.getClass());
+    protected LotteryCommand() {
+        this.commandHelper = new CommandHelper();
         this.subcommands = new HashMap<>();
     }
 
-    protected abstract void execute(LotteryCommand lotteryCommand, LotteryUser lotteryUser);
+    /**
+     * This method will be executed once the user execute a command that is associated with what is defined in {@link LotteryCommand#getCommandName()}.
+     * If the class has an permission annotation it will also check if the player requires the correct permission.
+     *
+     * @param lotteryUser The executor of the command
+     * @param args        The arguments that have been passed in.
+     */
+    protected abstract void execute(LotteryUser lotteryUser, String[] args);
 
     public void registerSubcommand(LotteryCommand... lotteryCommand) {
-        Arrays.stream(lotteryCommand).forEach(lotteryCommandObj -> this.subcommands.put(lotteryCommandObj.commandName, lotteryCommandObj));
+        Arrays.stream(lotteryCommand).forEach(lotteryCommandObj -> {
+            if (isEndless()) throw new MainCommandEndlessAnnotationException(this.getClass());
+            this.subcommands.put(lotteryCommandObj.getSubcommandName(), lotteryCommandObj);
+        });
     }
 
-    public String getCommandName() {
-        return commandName;
+    /**
+     * To check if the command is fully usable for in-game use, what I mean with this is that it will check for all the required annotations and everything necessary.
+     *
+     * @return True if the command is usable false if it is not.
+     */
+    public boolean isValid() {
+        return true;
     }
 
-    public void addSubcommand(LotteryCommand lotteryCommand) {
-        subcommands.put(lotteryCommand.commandName, lotteryCommand);
-    }
-
-    public void removeSubcommand(String commandName) {
+    public void unRegisterSubcommand(String commandName) {
         subcommands.remove(commandName);
     }
 
     /**
      * Returns a map with all the subcommands. To modify the map please use;
      * <ul>
-     *     <li>{@link LotteryCommand#addSubcommand(LotteryCommand)}</li>
-     *     <li>{@link LotteryCommand#addSubcommand(LotteryCommand)}</li>
+     *     <li>{@link LotteryCommand#registerSubcommand(LotteryCommand...)}</li>
+     *     <li>{@link LotteryCommand#unRegisterSubcommand(String)}</li>
      * </ul>
      *
      * @return a unmodifiable map of the command and lotteryCommands
@@ -64,11 +71,66 @@ public abstract class LotteryCommand implements CommandExecutor {
         return Collections.unmodifiableMap(subcommands);
     }
 
+    public String getCommandName() {
+        return commandHelper.getCommandName(this.getClass());
+    }
 
-    // todo make this a LOT better lmfao
+    public String getSubcommandName() {
+        return commandHelper.getSubcommandName(this.getClass());
+    }
+
+    public boolean isEndless() {
+        return commandHelper.isCommandArgumentsEndless(this.getClass());
+    }
+
+    /**
+     * @return Will return null if permission annotation is not found.
+     */
+    public String getPermission() {
+        return commandHelper.getCommandPermission(this.getClass());
+    }
+
+
     @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String label, String[] strings) {
-        execute(this, new LotteryPlayer(commandSender));
+    public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
+        LotteryPlayer lotteryUser = new LotteryPlayer(commandSender);
+        executeCommand(lotteryUser, this, args);
         return true;
+    }
+
+    private void executeCommand(LotteryPlayer lotteryPlayer, LotteryCommand lotteryCommand, String[] args) {
+        if (lotteryCommand.getPermission() == null || ((CommandSender) lotteryPlayer).hasPermission(lotteryCommand.getPermission())) {
+            if (args.length == 0) {
+                lotteryCommand.execute(lotteryPlayer, args);
+            } else {
+                for (int i = 0; i < args.length; i++) {
+                    String argument = args[i];
+                    System.out.println("The first arguments " + argument);
+                    Map<String, LotteryCommand> subcommands = lotteryCommand.getSubcommands();
+
+                    System.out.println(subcommands.keySet());
+
+                    LotteryCommand lotterySubcommand = subcommands.get(argument);
+                    if (lotterySubcommand != null) {
+                        if (lotterySubcommand.getPermission() == null || ((CommandSender) lotteryPlayer).hasPermission(lotterySubcommand.getPermission())) {
+                            String nextArgument = args[i + 1];
+                            System.out.println("The next arguments " + nextArgument);
+                            LotteryCommand nextLotterySubcommand = lotterySubcommand.getSubcommands().get(nextArgument);
+                            if (nextLotterySubcommand != null) {
+                                nextLotterySubcommand.executeCommand(lotteryPlayer, nextLotterySubcommand, Arrays.copyOfRange(args, i + 1, args.length));
+                                System.out.println("The copyarray arguments " + Arrays.toString(Arrays.copyOfRange(args, i + 1, args.length)));
+                            }
+                        } else {
+                            lotteryPlayer.sendFormattedMessage("You do not have the right permissions to execute this command.");
+                            break;
+                        }
+                    } else {
+                        lotteryPlayer.sendFormattedMessage("This command doesn't exist");
+                        break;
+                    }
+                }
+            }
+
+        }
     }
 }

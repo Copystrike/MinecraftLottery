@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Permission -
+ * Permission - Use this flag to assign permissions to a command.
  *
  * @author Copystrike
  * @since 01/03/2021 @ 01:53

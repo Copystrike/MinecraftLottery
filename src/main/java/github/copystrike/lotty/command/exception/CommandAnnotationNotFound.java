@@ -11,6 +11,6 @@ import github.copystrike.lotty.command.LotteryCommand;
 public class CommandAnnotationNotFound extends RuntimeException {
 
     public CommandAnnotationNotFound(Class<? extends LotteryCommand> commandClass) {
-        super("Command  (" + commandClass.getName() + ") Does not have a @Command annotation.");
+        super("Command  " + commandClass.getCanonicalName() + " Does not have a command annotation.");
     }
 }

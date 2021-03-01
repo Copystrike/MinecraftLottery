@@ -70,6 +70,7 @@ public final class LotteryPlugin extends LotteryBase {
                 new LotteryResetStats(),
                 new LotteryStartCommand(),
                 new LotterySetStats());
+        System.out.println(lotteryCommand.getSubcommands());
         commandManager.registerCommand(lotteryCommand);
     }
 

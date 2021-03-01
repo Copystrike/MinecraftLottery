@@ -6,14 +6,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Command - This will let the commandManager know its an command.
+ * Endless - This flag will be handy to create an endless command argument
  *
  * @author Copystrike
- * @since 28/02/2021 @ 22:54
+ * @since 01/03/2021 @ 14:47
  */
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface Command {
-
-    String value();
-}
+public @interface Endless { }
